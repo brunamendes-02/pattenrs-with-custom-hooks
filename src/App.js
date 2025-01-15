@@ -19,7 +19,6 @@ function Task({ task, updateTaskStatus }) {
       updateTaskStatus(task.id, state);
     }
   }, [state]);
-  
 
   return (
     <div>
@@ -92,7 +91,7 @@ function TaskForm({ addTask }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form style={{ display: 'flex', justifyContent: 'center' }} onSubmit={handleSubmit}>
       <label>Nome da Tarefa: &nbsp; {textInput}</label>&nbsp;
       <label>
         Importante:
@@ -116,7 +115,7 @@ function App() {
 
   return (
     <div>
-      <h1>Gerenciador de Tarefas</h1>
+      <h1 style={{ textAlign: "center" }}>Gerenciador de Tarefas</h1>
       <TaskForm addTask={addTask} />
       <TaskManager tasks={tasks} />
     </div>
