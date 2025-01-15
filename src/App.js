@@ -20,7 +20,7 @@ function Task({ task, updateTaskStatus }) {
 
   return (
     <div>
-      <h3>{task.title}</h3>
+      <h2>{task.title}</h2>
       <p>Status: {state}</p>
       <button onClick={setToInProgress}>Iniciar</button>
       <button onClick={setToCompleted}>Concluir</button>
@@ -30,13 +30,13 @@ function Task({ task, updateTaskStatus }) {
 }
 
 function TaskManager({ tasks }) {
-  const { updateTaskStatus, addObserver, removeObserver } =
+  const { updateTaskStatus, addObserver, removeObserver, history } =
     useTaskStatusObserver(tasks);
 
   useEffect(() => {
     const logStatusChange = (updatedTasks) => {
       new Notification("Tarefas Atualizadas", {
-        body: `Status das tarefas atualizado: ${updatedTasks.join(", ")}`,
+        body: `Status das tarefas atualizado`,
       });
     };
 
@@ -45,10 +45,24 @@ function TaskManager({ tasks }) {
   }, [tasks]);
 
   return (
-    <div>
-      {tasks.map((task) => (
-        <Task key={task.id} task={task} updateTaskStatus={updateTaskStatus} />
-      ))}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "start",
+      }}
+    >
+      <div>
+        {tasks.map((task) => (
+          <Task key={task.id} task={task} updateTaskStatus={updateTaskStatus} />
+        ))}
+      </div>
+      <div>
+        <h2>Histórico:</h2>
+        {history?.map((item) => (
+          <p>{item}</p>
+        ))}
+      </div>
     </div>
   );
 }
@@ -76,14 +90,12 @@ function TaskForm({ addTask }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Nome da Tarefa: 
-        &nbsp; {textInput}
-      </label>&nbsp; 
+      <label>Nome da Tarefa: &nbsp; {textInput}</label>&nbsp;
       <label>
         Importante:
         {checkboxInput}
-      </label>&nbsp; 
+      </label>
+      &nbsp;
       <button type="submit">Adicionar Tarefa</button>
     </form>
   );
