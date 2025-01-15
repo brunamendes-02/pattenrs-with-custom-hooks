@@ -15,8 +15,11 @@ function Task({ task, updateTaskStatus }) {
   );
 
   useEffect(() => {
-    updateTaskStatus(task.id, state);
+    if (task.status !== state) {
+      updateTaskStatus(task.id, state);
+    }
   }, [state]);
+  
 
   return (
     <div>

@@ -10,7 +10,7 @@ export function useTaskStatusObserver(addedTasks) {
   }, [tasks, observers]);
 
   const updateTaskStatus = (taskId, newStatus) => {
-    const taskName = tasks.find((task) => task.id === taskId).title;
+    const taskName = tasks.find((task) => task.id === taskId)?.title;
     setHistory((prevHistory) => [...prevHistory, `${taskName} foi pro status ${newStatus}`]);
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
