@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 
-function useTaskStatusObserver(initialTasks) {
-  const [tasks, setTasks] = useState(initialTasks);
+export function useTaskStatusObserver(addedTasks) {
+  const [tasks, setTasks] = useState(addedTasks);
   const [observers, setObservers] = useState([]);
 
   useEffect(() => {
     observers.forEach(callback => callback(tasks));
   }, [tasks, observers]);
+
+
+  useEffect(() => {
+    setTasks(addedTasks)
+  }, [addedTasks]);
 
   const updateTaskStatus = (taskId, newStatus) => {
     setTasks(prevTasks =>
@@ -26,5 +31,5 @@ function useTaskStatusObserver(initialTasks) {
     );
   };
 
-  return { tasks, updateTaskStatus, addObserver, removeObserver };
+  return { updateTaskStatus, addObserver, removeObserver };
 }

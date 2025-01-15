@@ -8,7 +8,7 @@ function CheckboxInput({ checked, onChange }) {
   return <input type="checkbox" checked={checked} onChange={onChange} />;
 }
 
-function useInputFactory(type, props) {
+export function useInputFactory(type, props) {
   switch (type) {
     case 'text':
       return <TextInput {...props} />;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function useTaskState(initialState = 'pendente') {
+export function useTaskState(initialState = 'pendente') {
   const [state, setState] = useState(initialState);
 
   const setToInProgress = () => setState('em progresso');

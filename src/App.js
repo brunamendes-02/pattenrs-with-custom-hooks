@@ -1,40 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useTaskStatusObserver } from './hooks/useTaskStatusObserver';
-import { useTaskState } from './hooks/useTaskState';
-import { useInputFactory } from './hooks/useInputFactory';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
+import { useTaskStatusObserver } from "./hooks/useTaskStatusObserver";
+import { useTaskState } from "./hooks/useTaskState";
+import { useInputFactory } from "./hooks/useInputFactory";
 
 const initialTasks = [
-  { id: 1, title: 'Tarefa 1', status: 'pendente' },
-  { id: 2, title: 'Tarefa 2', status: 'em progresso' },
+  { id: 1, title: "Tarefa 1", status: "pendente", isImportant: true },
+  { id: 2, title: "Tarefa 2", status: "em progresso", isImportant: false },
 ];
 
-function TaskManager() {
-  const { tasks, updateTaskStatus, addObserver, removeObserver } = useTaskStatusObserver(initialTasks);
-
-  useEffect(() => {
-    const logStatusChange = (updatedTasks) => {
-      console.log('Status das tarefas atualizado:', updatedTasks);
-    };
-
-    addObserver(logStatusChange);
-    return () => removeObserver(logStatusChange);
-  }, [addObserver, removeObserver]);
-
-  return (
-    <div>
-      {tasks.map(task => (
-        <Task key={task.id} task={task} updateTaskStatus={updateTaskStatus} />
-      ))}
-    </div>
-  );
-}
-
 function Task({ task, updateTaskStatus }) {
-  const { state, setToInProgress, setToCompleted, resetState } = useTaskState(task.status);
+  const { state, setToInProgress, setToCompleted, resetState } = useTaskState(
+    task.status
+  );
 
   useEffect(() => {
     updateTaskStatus(task.id, state);
-  }, [state, task.id, updateTaskStatus]);
+  }, [state]);
 
   return (
     <div>
@@ -47,24 +29,49 @@ function Task({ task, updateTaskStatus }) {
   );
 }
 
+function TaskManager({ tasks }) {
+  const { updateTaskStatus, addObserver, removeObserver } =
+    useTaskStatusObserver(tasks);
+
+  useEffect(() => {
+    const logStatusChange = (updatedTasks) => {
+      new Notification("Tarefas Atualizadas", {
+        body: `Status das tarefas atualizado: ${updatedTasks.join(", ")}`,
+      });
+  
+    };
+
+    addObserver(logStatusChange);
+    return () => removeObserver(logStatusChange);
+  }, [tasks]);
+
+  return (
+    <div>
+      {tasks.map((task) => (
+        <Task key={task.id} task={task} updateTaskStatus={updateTaskStatus} />
+      ))}
+    </div>
+  );
+}
+
 function TaskForm({ addTask }) {
-  const [taskName, setTaskName] = useState('');
+  const [taskName, setTaskName] = useState("");
   const [isImportant, setIsImportant] = useState(false);
 
-  const textInput = useInputFactory('text', {
+  const textInput = useInputFactory("text", {
     value: taskName,
-    onChange: e => setTaskName(e.target.value),
+    onChange: (e) => setTaskName(e.target.value),
   });
 
-  const checkboxInput = useInputFactory('checkbox', {
+  const checkboxInput = useInputFactory("checkbox", {
     checked: isImportant,
-    onChange: e => setIsImportant(e.target.checked),
+    onChange: (e) => setIsImportant(e.target.checked),
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTask({ title: taskName, status: 'pendente', isImportant });
-    setTaskName('');
+    addTask({ title: taskName, status: "pendente", isImportant });
+    setTaskName("");
     setIsImportant(false);
   };
 
@@ -87,7 +94,10 @@ function App() {
   const [tasks, setTasks] = useState(initialTasks);
 
   const addTask = (newTask) => {
-    setTasks(prevTasks => [...prevTasks, { ...newTask, id: prevTasks.length + 1 }]);
+    setTasks((prevTasks) => [
+      ...prevTasks,
+      { id: prevTasks.length + 1, ...newTask },
+    ]);
   };
 
   return (
