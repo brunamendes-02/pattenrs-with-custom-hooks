@@ -38,7 +38,6 @@ function TaskManager({ tasks }) {
       new Notification("Tarefas Atualizadas", {
         body: `Status das tarefas atualizado: ${updatedTasks.join(", ")}`,
       });
-  
     };
 
     addObserver(logStatusChange);
@@ -78,13 +77,13 @@ function TaskForm({ addTask }) {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Nome da Tarefa:
-        {textInput}
-      </label>
+        Nome da Tarefa: 
+        &nbsp; {textInput}
+      </label>&nbsp; 
       <label>
         Importante:
         {checkboxInput}
-      </label>
+      </label>&nbsp; 
       <button type="submit">Adicionar Tarefa</button>
     </form>
   );
